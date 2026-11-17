@@ -1,0 +1,953 @@
+# **NAINA MOTORS CRM**
+
+## **Complete Technical & Product Migration Handover**
+
+Prepared 17 November 2026 | Destination: Google AI Studio | Scope: Private Dealer Desk CRM
+
+**This handover covers the existing private Naina Motors CRM at&#x20;**`crm.nainamotors.com`**.** It does not cover the separate public vehicle showroom at `nainamotors.com`.
+
+I located the actual private GitHub repository and verified its development branch, source tree, database migrations, and documented migration safeguards.
+
+**Verified source repository**
+
+Accessible
+
+`sakshampathak01-wq/naina-motors-dealer-desk`
+
+Development branch: `feature/main-crm-cloud-preview`
+
+Commit: `07c8866d7f5ba2e823efa2cb91b382538131875b`
+
+248 tracked files, approximately 1.62 MB of source and project assets
+
+[Open exact source revision](https://github.com/sakshampathak01-wq/naina-motors-dealer-desk/tree/07c8866d7f5ba2e823efa2cb91b382538131875b?utm_source=chatgpt.com)[Open development PR #1](https://github.com/sakshampathak01-wq/naina-motors-dealer-desk/pull/1?utm_source=chatgpt.com)
+
+**Critical distinction:** The GitHub branch is newer than the last confirmed live deployment. It contains substantial cloud-development code, but that does not mean the cloud functionality is deployed, enabled, or holding your original business records.
+
+The migration must preserve the **original 386-vehicle dataset**, browser-local storage, historical financial records, document/media relationships, and existing owner access. No live production data should be replaced during the rebuild.
+
+The handover below distinguishes three states: verified source-code implementation, previously confirmed live behaviour, and functionality that still requires deployment or testing.
+
+## **1. Current architecture and hosting**
+
+### **1.1 Deployment identity**
+
+| Component                         | Existing configuration                       |
+| --------------------------------- | -------------------------------------------- |
+| Application                       | Naina Motors — Dealer Desk                   |
+| Live URL                          | `https://crm.nainamotors.com`                |
+| Original hosting                  | ChatGPT Sites / managed application hosting  |
+| Hosting project                   | `appgprj_6aca62581e288191af74309f0392facc`   |
+| Last confirmed production release | Version 15                                   |
+| Newer saved source                | Version 16 and subsequent GitHub development |
+| Backend execution target          | Cloudflare-compatible Worker runtime         |
+| Database design                   | Cloudflare D1 (SQLite)                       |
+| File storage design               | Private Cloudflare R2                        |
+| Browser database                  | `localStorage`, key `naina-desk-v1`          |
+| Backend cloud activation          | Disabled in reviewed source                  |
+| Development PR                    | #1, draft and unmerged                       |
+
+The repository's `.openai/hosting.json` declares these bindings:
+
+```
+{
+  "project_id": "appgprj_6aca62581e288191af74309f0392facc",
+  "d1": "DB",
+  "r2": "BUCKET"
+}
+```
+
+These declarations do not prove that actual hosted database or bucket resources exist or contain data.
+
+### **1.2 Technology stack**
+
+| Layer                       | Technology                                             |
+| --------------------------- | ------------------------------------------------------ |
+| Main existing CRM interface | Vanilla JavaScript, HTML and CSS                       |
+| Cloud application framework | Next.js 16.3.4 with Vinext 1.0.0-beta.5                |
+| Component framework         | React 19.2.6                                           |
+| Language                    | JavaScript and TypeScript                              |
+| Build system                | Vite 8.0.13                                            |
+| CSS tooling                 | Tailwind CSS 4.2.1 and existing custom CSS             |
+| Component libraries         | shadcn-style UI, Radix UI, Base UI                     |
+| Icons                       | Lucide React                                           |
+| Forms and validation        | React Hook Form, Zod                                   |
+| Database ORM                | Drizzle ORM 0.45.2                                     |
+| SQL migration tooling       | Drizzle Kit 0.31.10                                    |
+| Runtime tooling             | Wrangler 4.92.0                                        |
+| Package manager             | pnpm 11.25.0                                           |
+| Runtime requirement         | Node.js 22.13.0 or newer                               |
+| Testing                     | Node test runner, Python SQLite checks, GitHub Actions |
+
+Other declared dependencies include Recharts, date-fns, React Day Picker, Embla Carousel, Sonner, cmdk, Vaul and React Resizable Panels.
+
+**Important:** Having React and shadcn packages in the repository does not mean the existing CRM was fully rewritten in React. The actual main interface still relies heavily on `ui/crm.html`, `public/app.js`, and `public/style.css`.
+
+### **1.3 Storage architecture**
+
+**Private owner interface**
+
+crm.nainamotors.com
+
+**Browser storage**
+
+Existing local CRM records
+
+**Private API**
+
+Owner-protected cloud services
+
+**D1 / SQLite**
+
+27-table schema
+
+**Private R2**
+
+Photo and document bytes
+
+Cloud services are development architecture, not confirmed active production storage. Browser records remain the authoritative historical source until a verified cutover.
+
+### **1.4 Security and release controls**
+
+The source uses server-side owner authentication, same-origin checks on mutations, global database revision checks, idempotency tokens and private file-access controls.
+
+The following activation flags are explicitly `false` in the reviewed development revision:
+
+```
+LEGACY_CLOUD_ENABLED = false
+CRM_READ_FEATURES_ENABLED = false
+MAIN_CRM_CLOUD_PREVIEW_ENABLED = false
+CRM_WRITES_ENABLED = false
+PRIVATE_MEDIA_ENABLED = false
+CLOUD_TRANSFER_ENABLED = false
+HOSTED_READONLY_PREFLIGHT_ENABLED = false
+```
+
+These are source-code-controlled release gates, not ordinary browser toggles.
+
+The existing hosted authentication uses platform-provided identity information. Google AI Studio or any replacement host must implement its own securely verified owner authentication; simply copying authentication headers is unsafe.
+
+### **1.5 Environment variables and bindings**
+
+Known development/runtime configuration names include:
+
+```
+DB
+BUCKET
+CONNECTORS
+CODEX_SANDBOX
+CLOUDFLARE_CF_FETCH_ENABLED
+WRANGLER_SEND_METRICS
+WRANGLER_WRITE_LOGS
+WRANGLER_LOG_PATH
+WRANGLER_REGISTRY_PATH
+MINIFLARE_REGISTRY_PATH
+```
+
+`DB`, `BUCKET` and `CONNECTORS` are runtime bindings, not necessarily conventional `.env` variables. The original owner's access policy is configured in source rather than through a verified portable environment variable.
+
+No Firebase service account, payment API credential, WhatsApp token, or Google Apps Script deployment is established as part of this private CRM architecture.
+
+## **2. Complete source code and exact file locations**
+
+The complete **tracked development source** is in the verified private GitHub commit, not in the last deployed production version.
+
+**Complete GitHub source ZIP**
+
+Use this exact commit, not the older `main` branch.
+
+[Download pinned source archive](https://github.com/sakshampathak01-wq/naina-motors-dealer-desk/archive/07c8866d7f5ba2e823efa2cb91b382538131875b.zip?utm_source=chatgpt.com)
+
+The archive is the correct way to transfer all 248 tracked files with their original source contents and paths. Reprinting approximately 1.62 MB of code inside the handover would be less reliable and could truncate the source.
+
+**However, the archive is not a complete business-data backup.** The private historical inventory source `source-data/imported-data.js`, browser storage, hosted D1 rows, R2 files, secrets and deployment credentials must be obtained separately.
+
+The key implementation locations are:
+
+| Area                              | Exact file paths                                       |
+| --------------------------------- | ------------------------------------------------------ |
+| Main CRM HTML                     | `ui/crm.html`                                          |
+| Main interface logic              | `public/app.js`                                        |
+| Main styling                      | `public/style.css`                                     |
+| Cloud workspace                   | `ui/workspace-cloud.html`, `public/cloud-workspace.js` |
+| Cloud integration                 | `public/main-cloud-adapter.js`                         |
+| Cloud inventory                   | `public/main-cloud-inventory.js`                       |
+| Cloud sales and finance           | `public/main-cloud-finance.js`                         |
+| Cloud customers/leads             | `public/main-cloud-contacts.js`                        |
+| Cloud documents/location          | `public/main-cloud-editor.js`                          |
+| Photo and document vault          | `public/main-cloud-media.js`                           |
+| Reservations                      | `public/main-cloud-reservations.js`                    |
+| Reminders                         | `public/main-cloud-reminders.js`                       |
+| RTO and workshop                  | `public/main-cloud-service-jobs.js`                    |
+| Auctions and inspections          | `public/main-cloud-operations.js`                      |
+| Cross-device revision monitoring  | `public/main-cloud-sync.js`                            |
+| Backend CRM reads                 | `lib/crm-reads.ts`                                     |
+| Backend CRM transactions          | `lib/crm-writes.ts`                                    |
+| Backup validation/import planning | `lib/cloud-core.mjs`                                   |
+| Cloud data export/verification    | `lib/crm-transfer.ts`                                  |
+| Private media backend             | `lib/private-media.ts`                                 |
+| Authentication                    | `lib/owner-auth.ts`, `app/chatgpt-auth.ts`             |
+| Database model                    | `db/schema.ts`                                         |
+| Original 9-table migration        | `drizzle/0000_deep_mockingbird.sql`                    |
+| Additional 18-table migration     | `drizzle/0001_private_dashboard_features.sql`          |
+| Hosting configuration             | `.openai/hosting.json`, `vite.config.ts`               |
+| Dependencies                      | `package.json`, `pnpm-lock.yaml`                       |
+| Automated tests                   | `tests/`                                               |
+| CI configuration                  | `.github/workflows/dealer-desk-ci.yml`                 |
+
+The newest reviewed GitHub Actions run for this exact commit completed successfully on **25 October 2026**: [View successful CI run](https://github.com/sakshampathak01-wq/naina-motors-dealer-desk/actions/runs/40242277440?utm_source=chatgpt.com).
+
+That confirms development checks passed. It does not prove that hosted owner authentication, production data migration, or live multi-device syncing work.
+
+## **3. Database schema, relationships and dropdown values**
+
+### **3.1 Database design rules**
+
+The development schema contains **27 SQLite/D1 tables**, created by two migrations:
+
+- `drizzle/0000_deep_mockingbird.sql` — 9 original tables and 4 explicit unique indexes.
+- `drizzle/0001_private_dashboard_features.sql` — 18 additional tables and 14 explicit indexes.
+
+This is a **defined migration schema**, not proof that all 27 tables have been created in a hosted production database.
+
+The source SQL files are authoritative for every SQL type, nullability constraint, default, foreign key and index. The table below reproduces all defined table columns.
+
+Notation: `*` means `NOT NULL`; `PK` means primary key; `FK` means a declared foreign key; `=value` means a database default. Fields without `*` or `PK` are nullable unless constrained elsewhere.
+
+### **3.2 Core tables — original migration**
+
+| Table               | Complete SQL column inventory                                                                                                                                      |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `vehicles`          | `id` TEXT PK; `owner_id` TEXT\*; `payload_json` TEXT\*; `status` TEXT\*; `registration_key` TEXT; `chassis_key` TEXT; `revision` INTEGER\* =1; `updated_at` TEXT\* |
+| `sales`             | `id` TEXT PK; `vehicle_id` TEXT\* FK; `customer_id` TEXT FK; `payload_json` TEXT\*; `revision` INTEGER\* =1                                                        |
+| `customers`         | `id` TEXT PK; `owner_id` TEXT\*; `payload_json` TEXT\*; `revision` INTEGER\* =1                                                                                    |
+| `leads`             | `id` TEXT PK; `owner_id` TEXT\*; `payload_json` TEXT\*; `revision` INTEGER\* =1                                                                                    |
+| `expenses`          | `id` TEXT PK; `vehicle_id` TEXT\* FK; `kind` TEXT\*; `amount_json` TEXT\*; `payload_json` TEXT\*                                                                   |
+| `import_history`    | `id` TEXT PK; `owner_id` TEXT\*; `backup_hash` TEXT\*; `status` TEXT\*; `preview_json` TEXT\*; `created_at` TEXT\*                                                 |
+| `audit_logs`        | `id` TEXT PK; `actor_id` TEXT\*; `action` TEXT\*; `entity_id` TEXT; `before_json` TEXT; `after_json` TEXT; `created_at` TEXT\*                                     |
+| `cloud_metadata`    | `key` TEXT PK; `value` TEXT\*                                                                                                                                      |
+| `connection_probes` | `id` TEXT PK; `nonce` TEXT\*; `created_at` TEXT\*                                                                                                                  |
+
+The `payload_json` columns deliberately preserve complete original business objects. They are not disposable metadata fields.
+
+### **3.3 Additional 18 tables**
+
+| Table                   | Complete SQL column inventory                                                                                                                                                                                                                                                                                                                                                                                                               |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `vehicle_locations`     | `vehicle_id` TEXT PK/FK; `location_type` TEXT\*; `location_label` TEXT; `notes` TEXT; `changed_at` TEXT\* =CURRENT_TIMESTAMP                                                                                                                                                                                                                                                                                                                |
+| `vehicle_age_baselines` | `vehicle_id` TEXT PK/FK; `purchased_at` TEXT; `source_quality` TEXT\* ='Unknown'; `notes` TEXT                                                                                                                                                                                                                                                                                                                                              |
+| `vehicle_media`         | `id` TEXT PK; `vehicle_id` TEXT\* FK; `object_key` TEXT\*; `original_filename` TEXT\*; `mime_type` TEXT\*; `bytes` INTEGER\*; `category` TEXT\*; `notes` TEXT; `sha256` TEXT; `version_number` INTEGER\* =1; `is_cover` INTEGER\* =0; `uploaded_by` TEXT\*; `uploaded_at` TEXT\* =CURRENT_TIMESTAMP; `archived_at` TEXT                                                                                                                     |
+| `vehicle_timeline`      | `id` TEXT PK; `vehicle_id` TEXT\* FK; `event_kind` TEXT\*; `happened_at` TEXT\* =CURRENT_TIMESTAMP; `title` TEXT\*; `notes` TEXT; `metadata_json` TEXT; `actor` TEXT\*                                                                                                                                                                                                                                                                      |
+| `vehicle_inspections`   | `id` TEXT PK; `vehicle_id` TEXT\* FK; `inspected_at` TEXT\*; `inspector` TEXT; `odometer_km` REAL; `overall_condition` TEXT; `notes` TEXT; `checklist_json` TEXT\* =''; `estimated_repairs` REAL; `created_at` TEXT\* =CURRENT_TIMESTAMP                                                                                                                                                                                                    |
+| `document_requirements` | `id` TEXT PK; `vehicle_id` TEXT\* FK; `document_type` TEXT\*; `status` TEXT\* ='Missing'; `due_at` TEXT; `notes` TEXT; `updated_at` TEXT\* =CURRENT_TIMESTAMP                                                                                                                                                                                                                                                                               |
+| `document_expiries`     | `id` TEXT PK; `vehicle_id` TEXT\* FK; `document_type` TEXT\*; `expires_at` TEXT\*; `reminder_days` INTEGER\* =30; `notes` TEXT                                                                                                                                                                                                                                                                                                              |
+| `generated_documents`   | `id` TEXT PK; `vehicle_id` TEXT\* FK; `template_type` TEXT\*; `document_number` TEXT; `generated_at` TEXT\* =CURRENT_TIMESTAMP; `generated_by` TEXT\*; `object_key` TEXT; `snapshot_json` TEXT\*; `notes` TEXT                                                                                                                                                                                                                              |
+| `enquiry_notes`         | `id` TEXT PK; `lead_id` TEXT FK; `vehicle_id` TEXT FK; `customer_name` TEXT; `phone` TEXT; `asking_price` REAL; `offered_price` REAL; `note` TEXT; `followup_at` TEXT; `status` TEXT\* ='Open'; `created_at` TEXT\* =CURRENT_TIMESTAMP                                                                                                                                                                                                      |
+| `reservations`          | `id` TEXT PK; `vehicle_id` TEXT\* FK; `customer_name` TEXT\*; `customer_phone` TEXT; `token_amount` REAL\* =0; `reserved_at` TEXT\*; `expires_at` TEXT; `status` TEXT\* ='Active'; `notes` TEXT                                                                                                                                                                                                                                             |
+| `customer_payments`     | `id` TEXT PK; `sale_id` TEXT\* FK; `received_at` TEXT\*; `amount` REAL\*; `method` TEXT\*; `payment_reference` TEXT; `note` TEXT; `created_at` TEXT\* =CURRENT_TIMESTAMP                                                                                                                                                                                                                                                                    |
+| `cashbook_entries`      | `id` TEXT PK; `occurred_at` TEXT\*; `entry_type` TEXT\*; `amount` REAL\*; `payment_method` TEXT\*; `category` TEXT\*; `accounting_role` TEXT\* ='Other'; `reference_id` TEXT; `description` TEXT; `created_by` TEXT\*; `created_at` TEXT\* =CURRENT_TIMESTAMP                                                                                                                                                                               |
+| `auction_plans`         | `id` TEXT PK; `vehicle_id` TEXT FK; `auction_platform` TEXT; `auction_reference` TEXT; `expected_resale` REAL\*; `estimated_repairs` REAL\* =0; `estimated_parking` REAL\* =0; `estimated_transfer` REAL\* =0; `estimated_transport` REAL\* =0; `other_estimated_expenses` REAL\* =0; `target_profit` REAL\* =0; `maximum_bid` REAL\*; `actual_bid` REAL; `outcome` TEXT\* ='Planned'; `notes` TEXT; `created_at` TEXT\* =CURRENT_TIMESTAMP |
+| `price_history`         | `id` TEXT PK; `vehicle_id` TEXT\* FK; `old_price` REAL; `new_price` REAL\*; `reason` TEXT; `changed_by` TEXT\*; `changed_at` TEXT\* =CURRENT_TIMESTAMP                                                                                                                                                                                                                                                                                      |
+| `repair_jobs`           | `id` TEXT PK; `vehicle_id` TEXT\* FK; `mechanic` TEXT; `description` TEXT\*; `estimated_cost` REAL =0; `final_cost` REAL; `status` TEXT\* ='Pending'; `started_at` TEXT; `completed_at` TEXT; `notes` TEXT                                                                                                                                                                                                                                  |
+| `rto_cases`             | `id` TEXT PK; `vehicle_id` TEXT\* FK; `procedure` TEXT\*; `stage` TEXT\*; `bank_noc_at` TEXT; `applied_at` TEXT; `completed_at` TEXT; `next_action_at` TEXT; `reference_no` TEXT; `notes` TEXT; `updated_at` TEXT\* =CURRENT_TIMESTAMP                                                                                                                                                                                                      |
+| `reminders`             | `id` TEXT PK; `vehicle_id` TEXT FK; `related_type` TEXT; `related_id` TEXT; `title` TEXT\*; `due_at` TEXT\*; `status` TEXT\* ='Open'; `priority` TEXT\* ='Normal'; `notes` TEXT; `created_at` TEXT\* =CURRENT_TIMESTAMP                                                                                                                                                                                                                     |
+| `owner_preferences`     | `setting_key` TEXT PK; `setting_value` TEXT\*; `updated_at` TEXT\* =CURRENT_TIMESTAMP                                                                                                                                                                                                                                                                                                                                                       |
+
+All `FK` references to vehicles use `vehicles.id`. `sales.customer_id` references `customers.id`; `customer_payments.sale_id` references `sales.id`; `enquiry_notes.lead_id` references `leads.id`.
+
+The declared foreign keys use `ON UPDATE NO ACTION` and `ON DELETE NO ACTION`. Other logical relationships, such as `cashbook_entries.reference_id` or `reminders.related_id`, are not declared SQL foreign keys.
+
+### **3.4 Required unique indexes**
+
+The following are explicit uniqueness protections, in addition to primary keys:
+
+- `vehicles_registration_unique` — `vehicles.registration_key`
+- `vehicles_chassis_unique` — `vehicles.chassis_key`
+- `expenses_vehicle_kind_unique` — `(vehicle_id, kind)`
+- `import_backup_hash_unique` — `import_history.backup_hash`
+- `uq_document_requirements_vehicle_id_document_type` — `(vehicle_id, document_type)`
+- `uq_document_expiries_vehicle_id_document_type` — `(vehicle_id, document_type)`
+- `uq_vehicle_media_object_key` — `object_key`
+- `uq_vehicle_one_cover_photo` — unique `vehicle_id` where `is_cover=1 AND archived_at IS NULL`
+- `uq_vehicle_one_active_reservation` — unique `vehicle_id` where `status='Active'`
+
+The remaining indexes cover cashbook dates, payments by sale, enquiry follow-ups, reminders, repair jobs, reservations, RTO next actions, media by vehicle/category/upload time, and vehicle timelines.
+
+**Registration rule:** `UNREG`, `UNREGISTERED`, `NA`, `N/A`, `NONE` and empty registrations must not be treated as unique real registration numbers. Preserve the original text, but use `NULL` for the normalized registration key.
+
+### **3.5 Exact implemented dropdowns and enums**
+
+The following are verified source-code values. Some are SQL-enforced, some UI-enforced, and some are only available in the gated development interface.
+
+| Field                      | Exact values                                                                                                               |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| Vehicle status             | `Available`, `Sold`, `Review`                                                                                              |
+| Enquiry pipeline           | `New`, `Contacted`, `Visit planned`, `Negotiating`, `Closed`                                                               |
+| Enquiry source             | `WhatsApp`, `OLX`, `Walk-in`, `Network`, `Facebook`, `Other`                                                               |
+| Ownership                  | blank, `1st`, `2nd`, `3rd`, `4th+`                                                                                         |
+| Location type              | `Showroom`, `Godown`, `Mechanic`, `In Transit`, `Other`                                                                    |
+| Document requirement       | `Missing`, `Pending`, `Received`, `Delivered`, `Not Applicable`                                                            |
+| Existing document selector | `Unknown`, `YES`, `NO`                                                                                                     |
+| Document type selector     | `RC`, `Bank NOC`, `Form 35`, `HPA removal`, `Insurance`, `PUC`, `Auction sale letter`, `Transfer documents`, `FIR`, `HSRP` |
+| Payment method             | `Cash`, `UPI`, `Bank`, `Other`                                                                                             |
+| Expense kind               | `parking`, `other`                                                                                                         |
+| Cashbook direction         | `IN`, `OUT`                                                                                                                |
+| Accounting role            | `Overhead`, `Vehicle Cost`, `Sale Receipt`, `Transfer`, `Loan`, `Other`                                                    |
+| Reservation status         | `Active`, `Expired`, `Cancelled`, `Converted`                                                                              |
+| Reminder status            | `Open`, `Done`, `Cancelled`                                                                                                |
+| Reminder priority          | `Low`, `Normal`, `High`                                                                                                    |
+| Auction outcome            | `Planned`, `Won`, `Lost`, `Cancelled`                                                                                      |
+| Inspection condition       | `Unassessed`, `Excellent`, `Good`, `Fair`, `Needs repair`                                                                  |
+| Inspection check result    | `Not checked`, `Pass`, `Attention`                                                                                         |
+| Age-baseline quality       | `Verified`, `Estimated`, `Unknown`                                                                                         |
+| Media category             | `photo`, `rc`, `noc`, `insurance`, `auction`, `form`, `sale`, `other`                                                      |
+
+The cloud RTO editor offers `Pending`, `Documents collected`, `Submitted`, `In Process`, `Completed`, `On Hold`, `Cancelled`.
+
+**Potential defect to review:** The workshop UI uses `In Progress`, while the database migration's repair-job constraint uses `In progress`. SQLite's case-sensitive constraint may reject that UI value. This should be reconciled through a reviewed migration and tests before enabling cloud writes.
+
+There is no verified production dropdown definition for a full loan approval pipeline, test-drive stage, GST category, salesperson commission stage or multi-user staff role hierarchy.
+
+## **4. Business logic, formulas, security and user permissions**
+
+### **4.1 Inventory cost calculations**
+
+These are actual calculations in the existing browser CRM:
+
+\\[ \text{Landed Cost}=\text{Purchase Cost}+\text{Parking}+\text{Other Expenses} \\]
+
+\\[ \text{Gross Profit}=\text{Selling Price}-\text{Landed Cost} \\]
+
+\\[ \text{Gross Margin \\%}=\frac{\text{Gross Profit}}{\text{Selling Price}}\times100 \\]
+
+\\[ \text{Return on Cost \\%}=\frac{\text{Gross Profit}}{\text{Landed Cost}}\times100 \\]
+
+Important rules:
+
+- Purchase cost corresponds to the original auction/bid price.
+- Parking and other expenses are separate amounts.
+- If either expense component is unavailable, the historical combined expense may be used for display, without fabricating a split.
+- Conflicting expense totals must be reviewed rather than silently recalculated.
+- Challans are tracked separately and are not automatically added to landed cost.
+- Repair estimates are not automatically posted as actual expenses.
+- Unknown financial values must be reported as unknown, not automatically converted into zero.
+- Review-status vehicles must not be treated as normal available or completed-sale stock for financial totals.
+
+The cloud writer performs monetary calculations using paise-level rounding and rejects invalid or excessive monetary amounts.
+
+### **4.2 Auction bid calculator**
+
+The existing auction calculator accepts expected resale price, proposed bid, parking, repairs, transfer/document charges, transport charges, other costs and desired profit.
+
+\\[ \text{Maximum Bid}=\text{Expected Resale}-\text{Estimated Expenses}-\text{Target Profit} \\]
+
+\\[ \text{Expected Gross Profit}=\text{Expected Resale}-(\text{Bid}+\text{Estimated Expenses}) \\]
+
+It shows whether a proposed bid is within the profitable maximum, landed cost, return on cost and profit margin.
+
+The separate `auction_plans` table permits historical plans, actual bids and outcomes. Creating an auction plan does not automatically purchase the vehicle or create an expense entry.
+
+### **4.3 Sale recording**
+
+**Existing browser workflow:** The owner opens an available vehicle, enters the selling price, remaining balance, sale date, buyer name, telephone and address, then records the sale. The vehicle becomes `Sold` and appears in the Sales book and Customers history.
+
+**Prepared cloud transaction rules:**
+
+1. The vehicle must exist and be `Available`.
+2. A second sale for the same vehicle is rejected.
+3. An active reservation must be separately closed before a sale.
+4. The buyer and valid calendar date are required.
+5. The balance cannot exceed the sale price.
+6. A linked customer ID, when supplied, must already exist.
+7. The vehicle's sale status and the sale record are written atomically.
+8. Any initial receipt also creates a payment record and matching cashbook entry in that same transaction.
+9. Existing sales are not freely editable; corrections require a dedicated reconciliation mechanism.
+
+The initial amount received is:
+
+\\[ \text{Initial Receipt}=\text{Sale Price}-\text{Outstanding Balance} \\]
+
+### **4.4 Customer receipts and outstanding balances**
+
+A later receipt must have a valid sale ID, amount, date and payment mode.
+
+\\[ \text{New Balance}=\text{Previous Recorded Balance}-\text{Payment Received} \\]
+
+The cloud code checks that the vehicle and sale balances agree before allowing another payment.
+
+Payments are append-only and create their corresponding cashbook receipts. **A customer receipt must not be added to sales revenue a second time.**
+
+There is no complete production-ready payment reversal, refund or historical correction workflow.
+
+### **4.5 Reservations and booking tokens**
+
+The CRM distinguishes a reservation from an actual sale.
+
+A new reservation starts in `Active`. It can subsequently be closed as `Expired`, `Cancelled` or `Converted`, but a closed reservation cannot be reopened through the generic writer.
+
+A vehicle can have only one active reservation. An active reservation blocks a sale until the reservation is closed.
+
+**Reservation token amounts are informational.** They do not automatically become customer receipts, cashbook income or sale values. Any money actually received must be reconciled through the accounting workflow.
+
+### **4.6 Prices, cashbook and expenses**
+
+- A normal vehicle edit cannot silently change the asking price; cloud price changes use a separate `price_history` entry.
+- Parking and other expense edits replace the recorded component total rather than appending another duplicate expense.
+- Cashbook records are append-only.
+- Cashbook entries have direction `IN` or `OUT`.
+- Customer receipts and vehicle costs use dedicated workflows; the generic cashbook writer cannot impersonate them.
+- Transfers and loans are tracked separately from profit.
+- Historical business capital, opening cash and closing cash are not automatically inferred.
+
+### **4.7 Reminders and follow-ups**
+
+The existing CRM evaluates follow-up dates using the `Asia/Kolkata` time zone.
+
+A task is classified as:
+
+| Classification  | Rule                                       |
+| --------------- | ------------------------------------------ |
+| Overdue         | Valid due date/time has passed             |
+| Due today       | Date-only due date equals today's IST date |
+| Upcoming        | Due date/time is in the future             |
+| Closed          | Status represents completion/cancellation  |
+| Requires review | Due date missing or not usable             |
+
+Follow-ups are drawn from enquiries, CRM reminders, RTO cases, document expiries and unfinished repair jobs.
+
+The `document_expiries.reminder_days` field defaults to 30, but this does **not** establish that an automatic 30-day notification service is running.
+
+There is no verified automated WhatsApp, email, SMS, push notification or scheduled reminder delivery system.
+
+### **4.8 Other requested business formulas**
+
+| Requested feature             | Actual CRM status                                                           |
+| ----------------------------- | --------------------------------------------------------------------------- |
+| GST calculation               | No verified comprehensive GST calculation engine                            |
+| RTO on-road charges           | RTO case tracking exists; automatic on-road tax computation not established |
+| Insurance premium calculation | Documents/media support exists; premium calculation not established         |
+| Loan eligibility/EMI          | No verified live finance/EMI workflow                                       |
+| Sales commission              | No verified commission engine                                               |
+| Discount approval             | No verified role-based discount approval system                             |
+| Invoice numbering             | `document_number` field exists, but no established numbering algorithm      |
+| Quotation numbering           | No verified automatic quotation numbering format                            |
+| Invoice PDF generation        | Not established as operational                                              |
+| Automated customer messages   | Not established                                                             |
+| Test-drive scheduling         | Not established as a dedicated implementation                               |
+
+These should be treated as future features rather than copied from imagined formulas.
+
+### **4.9 User roles and permissions**
+
+The operational access policy is currently **owner-only**.
+
+| Role            | Verified permissions                                                                                                 |
+| --------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Owner/Admin     | Existing private CRM access; local records and exports; gated server-side cloud operations when separately activated |
+| Sales           | No independent operational role implementation verified                                                              |
+| Telecaller      | No independent operational role implementation verified                                                              |
+| Service         | No independent operational role implementation verified                                                              |
+| Accounts        | No independent operational role implementation verified                                                              |
+| Public customer | Must not access this CRM                                                                                             |
+
+A future staff system may introduce draft-only edits, restricted financial visibility, activity logs and owner-controlled publication or approval, but it must not be assumed to exist already.
+
+### **4.10 Non-negotiable backend controls**
+
+The destination implementation must retain:
+
+- Server-verified identity and owner authorization before every private operation.
+- No trust in browser-supplied owner IDs, authentication headers or role claims.
+- Same-origin request validation on mutations.
+- Exact preservation of existing record IDs.
+- A canonical global revision in `cloud_metadata`.
+- Atomic revision checks and transactional writes.
+- Idempotency keys and stored write receipts.
+- Append-only financial history where applicable.
+- Audit logs and vehicle timelines.
+- Denial of duplicate vehicle registrations/chassis keys, duplicate sales and invalid active reservations.
+- Fail-closed handling when stored payloads conflict with indexed database fields.
+- No automatic retry after an ambiguous financial or media operation.
+- No automatic conversion of browser records into a new database at startup.
+
+The original implementation details are in `lib/crm-writes.ts`, `lib/crm-reads.ts`, `lib/cloud-core.mjs`, `lib/private-media.ts` and `lib/owner-auth.ts`.
+
+## **5. What works versus what is incomplete**
+
+Status as verified from repository, CI and previous deployment records—not a fresh authenticated inspection of the live CRM.
+
+### **5.1 Confirmed historical live functionality**
+
+| Feature                                    | State               |
+| ------------------------------------------ | ------------------- |
+| Private owner CRM interface                | Previously deployed |
+| Overview dashboard                         | Implemented         |
+| Inventory listing, searching and filtering | Implemented         |
+| Adding and editing vehicles locally        | Implemented         |
+| Recording sales in browser storage         | Implemented         |
+| Buyer directory from sold records          | Implemented         |
+| Enquiry pipeline and follow-up dates       | Implemented         |
+| Expense and gross-profit calculations      | Implemented         |
+| RC/NOC/FIR document tracking               | Implemented         |
+| Auction bid calculator                     | Implemented         |
+| Full browser JSON backup and restore       | Implemented         |
+| Inventory and sales CSV exports            | Implemented         |
+| Original Excel field retention             | Implemented         |
+| LocalStorage change protection             | Implemented         |
+
+These refer to functionality in the browser-based application. Availability on a particular device depends on that device's saved data and the deployed version.
+
+### **5.2 Development code implemented but not activated in production**
+
+| Feature                                     | State                          |
+| ------------------------------------------- | ------------------------------ |
+| 27-table D1 database schema                 | Implemented and offline-tested |
+| Owner-protected cloud read APIs             | Implemented, disabled          |
+| Cloud inventory CRUD                        | Implemented, disabled          |
+| Cloud customer/enquiry CRUD                 | Implemented, disabled          |
+| Atomic sale/customer receipt flows          | Implemented, disabled          |
+| Independent document and location updates   | Implemented, disabled          |
+| RTO/HPA and workshop updates                | Implemented, disabled          |
+| Reservations and booking history            | Implemented, disabled          |
+| Inspections and auction history             | Implemented, disabled          |
+| Price-history transactions                  | Implemented, disabled          |
+| Private R2 media service                    | Implemented, disabled          |
+| Media archive/cover/download operations     | Implemented, disabled          |
+| Cloud database snapshot export/verification | Implemented, disabled          |
+| Backup relationship audits                  | Implemented and tested offline |
+| 45-second cloud revision watcher            | Implemented, disabled          |
+| Read-only hosted infrastructure preflight   | Implemented, disabled          |
+
+### **5.3 Incomplete, blocked or requiring new development**
+
+| Outstanding item                  | Required work                                                                 |
+| --------------------------------- | ----------------------------------------------------------------------------- |
+| Production D1 connectivity        | Provision/verify actual hosted database, migrations and persistent writes     |
+| Production R2 connectivity        | Verify private bucket, owner access, upload and download                      |
+| Historical migration              | Map 386 vehicle IDs, original sale evidence, customer identities and payments |
+| Three Review records              | Resolve original source-sheet discrepancies manually                          |
+| Eighteen missing buyer names      | Preserve as missing; obtain evidence before correction                        |
+| Positive historical receivables   | Verify actual payments and outstanding amounts                                |
+| Cloud cutover                     | Implement controlled migration and reversible activation                      |
+| Full disaster recovery            | Independently back up and rehearse D1 plus actual media bytes                 |
+| Authentication on new host        | Replace Sites-specific trusted identity with verified new-host authentication |
+| Mobile verification               | Test actual iPhone camera, uploads, forms and cross-device state              |
+| Repair-stage mismatch             | Reconcile `In Progress` versus `In progress`                                  |
+| Payment correction/refund         | Design audited reversal and reconciliation rules                              |
+| Bulk file recovery                | Implement verified complete media export/restore                              |
+| Generated legal/invoice documents | Implement approved templates and numbering                                    |
+| Owner/staff RBAC                  | Add secure roles only after owner access is stable                            |
+| Automated reminders               | Implement and test notification scheduling                                    |
+| Browser synchronization           | Complete hosted multi-device testing and final cutover                        |
+| GST/EMI/commission logic          | Define separately if required by the business                                 |
+
+### **5.4 Migration acceptance checklist**
+
+The new Google AI Studio implementation should not become the authoritative CRM until these checks pass:
+
+- All 27 database tables and required indexes are present.
+- Owner authentication succeeds; non-owner access fails.
+- The original 386 vehicle IDs are preserved.
+- Original source Excel rows and metadata are preserved.
+- Sales, customers and receipts are reconciled without duplicate historical transactions.
+- Financial balances agree with preserved source evidence.
+- All required photos and document files are backed up and recoverable.
+- Cross-device editing works without overwriting records.
+- The original browser backup can be recovered independently.
+- Production rollback has been rehearsed.
+- The public `nainamotors.com` site remains untouched.
+
+## **6. Complete data export and migration instructions**
+
+There are **three different sources of data** that must be handled separately:
+
+1. The original browser CRM JSON data.
+2. Any actual D1 cloud database records.
+3. Photo and document files in private storage.
+
+A GitHub source ZIP does not contain these records.
+
+### **6.1 Preserve the original browser CRM data**
+
+**Reference historical inventory**
+
+# **386**
+
+Total
+
+# **325**
+
+Sold
+
+# **58**
+
+Available
+
+# **3**
+
+Review
+
+These counts come from the previously audited version-3 browser backup. They are not a fresh count of today's browser storage.
+
+The historical backup also contained 18 sold vehicles without recorded buyer names, 10 sold vehicles with positive outstanding balances, three source-sheet status conflicts and four unregistered placeholders.
+
+**Export procedure:**
+
+1. Open `https://crm.nainamotors.com` on the original browser and computer containing the records.
+2. Check that the actual inventory and sales records appear. If it says there are no saved records, do not initialize an empty workspace or restore over existing data.
+3. Open **Data & backup** in the left sidebar.
+4. Click **Full backup**.
+5. Save the generated `naina-motors-backup-YYYY-MM-DD.json` file.
+6. Make a second independent copy in a private, secure location.
+7. Confirm it contains a `version`, `bikes` array, and `leads` array.
+8. Retain every other top-level field, including migration metadata and original Excel source rows.
+9. Do not edit or normalize any IDs, names, dates or historical values during the export.
+
+The backup format is approximately:
+
+```
+{
+  "version": 3,
+  "exportedAt": "original-export-timestamp",
+  "bikes": [],
+  "leads": [],
+  "appliedChanges": []
+}
+```
+
+This is an illustrative structure, not your actual inventory. The original file may contain additional fields such as import metadata and history markers; preserve all of them.
+
+### **6.2 Convert the JSON backup into importable CSV**
+
+I created a local read-only conversion utility for this migration.
+
+**Naina Motors browser backup → CSV**
+
+Python utility, tested with fictional records; leaves the source file untouched.
+
+Download CSV export utility
+
+On Windows, open PowerShell in the folder containing the Python script and your exported JSON, then run:
+
+```
+py naina_browser_backup_to_csv.py "naina-motors-backup-2026-11-17.json" "naina-migration-export"
+```
+
+Replace the example filename with the actual downloaded backup filename.
+
+The utility produces:
+
+| File                   | Purpose                                                       |
+| ---------------------- | ------------------------------------------------------------- |
+| `original_backup.json` | Exact byte-for-byte original backup copy                      |
+| `bikes.csv`            | Every vehicle's original ID and full JSON payload             |
+| `leads.csv`            | Every enquiry's original ID and full JSON payload             |
+| `manifest.json`        | Original file SHA-256, backup version, counts and source keys |
+
+These CSVs keep each complete record in a `payload_json` column rather than dropping nested fields. The original JSON remains the primary recovery artifact.
+
+The CRM's built-in **Export inventory CSV** and **Export sales CSV** are useful for reporting but are **not sufficient for a lossless migration**, because their selected reporting columns do not include the complete original IDs, relationships and metadata.
+
+### **6.3 Export any existing Cloudflare D1 database**
+
+First establish whether an actual CRM database exists and which D1 resource is bound to `DB`. Do not assume the private CRM uses the public showroom's Firebase database.
+
+If an actual D1 resource exists, use an authenticated Cloudflare environment with the appropriate account permissions.
+
+```
+npx wrangler whoami
+npx wrangler d1 list
+```
+
+After identifying the correct CRM database name:
+
+```
+npx wrangler d1 export <ACTUAL_CRM_DATABASE_NAME> --remote --output=naina-crm-d1-backup.sql
+```
+
+Replace the placeholder with the verified database name.
+
+This exports database schema and data, where present. It may briefly affect database availability and requires suitable export permissions. Consult Cloudflare's [official D1 export guidance](https://developers.cloudflare.com/d1/best-practices/import-export-data/?utm_source=chatgpt.com).&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://developers.cloudflare.com\&sz=32)
+
+Cloudflare D1 docs+1
+
+
+
+**Additional safeguards:**
+
+- Record the actual D1 database ID and applied migration history separately.
+- Retain the original SQL export before attempting any transformation.
+- Export all 27 tables if present—not just vehicles and customers.
+- Preserve original primary keys, foreign keys and JSON payloads.
+- Export audit logs, source migrations and historical sales/payment data.
+- Verify table counts and SQLite integrity in an isolated environment.
+- Never run the export against the public showroom project by mistake.
+
+If the source has no hosted D1 database, record that fact explicitly. Do not create fictional cloud rows to make an import look complete.
+
+### **6.4 Existing application-level D1 snapshots**
+
+The source includes the endpoint:
+
+```
+GET /api/private-crm-transfer?action=export
+```
+
+It is designed to export all 27 D1 tables in a SHA-256-verified JSON snapshot, with a maximum of 5,000 rows per table and a 20 MiB request limit for transfer operations.
+
+However, `CLOUD_TRANSFER_ENABLED` is currently `false` in the reviewed source, so this is **not a currently usable production export button**.
+
+The related tools are:
+
+```
+lib/crm-transfer.ts
+lib/snapshot-link-audit.mjs
+scripts/verify-cloud-restore.mjs
+scripts/compare-local-browser-cloud.mjs
+```
+
+The supplied offline verifier can check an authentic exported cloud snapshot:
+
+```
+node scripts/verify-cloud-restore.mjs SNAPSHOT.json
+```
+
+Do not enable the API merely to obtain an export without first reviewing the hosted access, release and database state.
+
+### **6.5 Export private photos and documents**
+
+If the CRM actually has R2 media, export **both** metadata and binary files.
+
+The `vehicle_media` table holds links and file attributes; it does not contain the complete image or PDF bytes.
+
+For an individual R2 object, Cloudflare documents commands of this form:
+
+```
+npx wrangler r2 object get <BUCKET_NAME>/<OBJECT_KEY> --file=original-file.bin --remote
+```
+
+For larger batches, use an authorized S3-compatible bulk-copy tool such as rclone, configured for the private R2 bucket.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://developers.cloudflare.com\&sz=32)
+
+Cloudflare R2 docs+1
+
+
+
+For each file, preserve:
+
+- Media ID and vehicle ID.
+- Original filename and MIME type.
+- Original private object key.
+- Category, byte size and SHA-256.
+- Version number and cover-photo flag.
+- Upload timestamp, uploader and archive status.
+- Actual original file bytes.
+
+Verify every downloaded file's byte length and cryptographic hash against its metadata. Archive status does not mean the original file may be discarded.
+
+An exported D1 table without the corresponding R2 objects is **not a complete media backup**.
+
+### **6.6 Historical data reconciliation before import**
+
+The original source contains mixed legacy sale information. It must not be automatically converted into invented normalized sales, payment or customer records.
+
+The destination should perform this ordered procedure:
+
+1. Validate the complete original browser JSON without modifying it.
+2. Inventory existing D1 records, if any.
+3. Compare exact vehicle IDs and normalized registration/chassis uniqueness.
+4. Match the original sales spreadsheet evidence by the preserved source row and serial number.
+5. Preserve the 18 missing buyer names as missing.
+6. Preserve the three `Review` entries unchanged pending manual resolution.
+7. Reconcile every existing cloud sale ID, customer ID and receipt ID against documented historical evidence.
+8. Check that no opening outstanding balance or later receipt is duplicated.
+9. Audit all foreign-key relationships and media associations.
+10. Run a dry-run import and produce a conflict report.
+11. Rehearse a full restore into a disposable database.
+12. Only then authorize a separately reviewed import and controlled cutover.
+
+**Acceptance rule:** Original IDs must survive the migration exactly, including whitespace-significant ID strings. Registration numbers are attributes, not substitutes for vehicle primary keys.
+
+Any real files used for this procedure should be kept in a private development environment with appropriate access controls, not committed to GitHub or placed in a publicly shared AI Studio project.
+
+## **7. UI, navigation, forms and daily workflows**
+
+### **7.1 Main application navigation**
+
+The private CRM uses a left sidebar, a main content area, responsive navigation, page breadcrumbs, vehicle counts and an owner-controlled cloud-view toggle.
+
+The main interface contains the following ten routes.
+
+| Page             | Route         | Purpose                                                    |
+| ---------------- | ------------- | ---------------------------------------------------------- |
+| Overview         | `#dashboard`  | Business summary, KPIs, recent sales and sales performance |
+| Inventory        | `#inventory`  | Available, sold and review stock, filters, vehicle details |
+| Enquiry pipeline | `#enquiries`  | Kanban-style customer enquiry management                   |
+| Customers        | `#customers`  | Historical buyers and separate cloud customer records      |
+| Sales book       | `#sales`      | Sold vehicles, selling amounts, buyers and balances        |
+| Costs & expenses | `#expenses`   | Inventory costs, profit/loss projections, cashbook         |
+| Documents        | `#documents`  | RC, NOC, FIR, HSRP and other paperwork                     |
+| Reminders        | `#reminders`  | Enquiry, document, workshop and RTO follow-ups             |
+| Bid calculator   | `#calculator` | Auction profitability and maximum bid                      |
+| Data & backup    | `#settings`   | Backup, restore, CSV exports and data information          |
+
+The principal screen definitions are in `public/app.js` and `ui/crm.html`.
+
+### **7.2 Vehicle detail interface**
+
+Each vehicle has six principal tabs:
+
+Vehicle
+
+Costs
+
+Buyer & sale
+
+Documents
+
+RTO & repairs
+
+Original Excel
+
+**Vehicle:** Model, registration, year, odometer, ownership, bank, engine/chassis, notes, location and gallery.
+
+**Costs:** Purchase amount, parking, other expenses, asking price, challans, landed cost and auction history.
+
+**Buyer & sale:** Sale value, outstanding balance, date, buyer details, receipts and reservation history.
+
+**Documents:** Stock checklist, buyer handover checklist, document statuses and attachments.
+
+**RTO & repairs:** RTO/HPA procedures, workshop jobs, inspections and work history.
+
+**Original Excel:** Preserved source inventory and sales rows with original column labels and values.
+
+The browser UI uses a shared vehicle modal for viewing and editing. The newer development branch also defines independent cloud dialogs for vehicle editing, price changes, location/document editing, finance, customer contacts, reminders, reservations, inspections/auctions, workshop/RTO and media previews.
+
+### **7.3 Enquiry workflow**
+
+Existing pipeline
+
+New
+
+Contacted
+
+Visit planned
+
+Negotiating
+
+Closed
+
+A user creates an enquiry with customer name, phone, interested vehicle, budget, source, stage, next follow-up date/time and conversation notes.
+
+The enquiry appears in the correct pipeline column. Its follow-up is reflected in reminders until the enquiry is closed.
+
+There is no separate fully implemented test-drive booking entity. `Visit planned` is the existing pipeline stage, not a dedicated test-drive system.
+
+### **7.4 Sales workflow**
+
+The existing system supports:
+
+1. Open Inventory and select an `Available` vehicle.
+2. Review its original purchase cost, asking price, documents and buyer information.
+3. Use Record sale and enter the agreed price, buyer details, date and outstanding balance.
+4. Save the transaction. The browser CRM marks the bike `Sold` and updates its sales and buyer views.
+5. In the future approved cloud flow, link the explicit sale ID and create reconciled payment/cashbook entries.
+6. Complete RTO transfer, buyer handover, documents and delivery activities separately.
+
+An automatic delivery invoice or legally finalized document workflow should not be assumed.
+
+### **7.5 Cloud-specific screens**
+
+The source includes two separate owner-protected cloud pages in addition to the main dashboard:
+
+| Route              | Purpose                                                                                               |
+| ------------------ | ----------------------------------------------------------------------------------------------------- |
+| `/cloud`           | Infrastructure connection status, connection test and import preview                                  |
+| `/workspace-cloud` | Independent cloud records, paginated CRUD forms, media vault, backup verification and export controls |
+
+The main dashboard also has a `View cloud data` control. The source supports a deliberately separate cloud view and restoration to browser-local view, rather than an automatic storage cutover.
+
+When cloud viewing is enabled in an authorized deployment, a revision monitor can check for changes every 45 seconds and when the browser regains focus. Open editing dialogs defer refreshes to protect unsaved changes.
+
+All of this remains subject to the disabled server-side activation gates and hosted verification requirements.
+
+### **7.6 Media workflow**
+
+The cloud-design gallery supports selecting a vehicle, uploading private photos/documents, showing supported image previews, designating a cover image, archiving, restoring and downloading original files.
+
+Supported backend formats include JPEG, PNG, WebP, PDF and limited HEIC handling, with a 15 MiB maximum per upload.
+
+PDF/HEIC inline preview and full mobile/camera compatibility are not established. There should be no public object URLs or automatic deletion of sold vehicles' attachments.
+
+### **7.7 Backup workflow**
+
+The owner should be able to open Data & backup, download the original browser JSON, export reporting CSV files, and restore a backup only after confirming the replacement.
+
+Cloud D1 backups and private R2 file backups are separate operations and must remain independently recoverable.
+
+## **Final instructions for Google AI Studio**
+
+# Naina Motors CRM — Development Continuation Instructions
+
+You are taking over development of the existing private **Naina Motors Dealer Desk CRM**.
+
+**Your responsibility is to continue and finish the existing application, not create an unrelated or simplified replacement.**
+
+## Source of truth
+
+- Private repository: `sakshampathak01-wq/naina-motors-dealer-desk`
+- Development branch: `feature/main-crm-cloud-preview`
+- Verified source commit: `07c8866d7f5ba2e823efa2cb91b382538131875b`
+- CRM domain: `crm.nainamotors.com`
+- Original managed hosting project: `appgprj_6aca62581e288191af74309f0392facc`
+- Existing browser data key: `naina-desk-v1`
+- Backend architecture: Cloudflare-compatible Worker, D1 and private R2
+- Database migrations: `drizzle/0000_deep_mockingbird.sql` and `drizzle/0001_private_dashboard_features.sql`
+
+## Non-negotiable instructions
+
+1. Import and inspect the complete source archive before altering the application.
+2. Preserve the original visual appearance, navigation, workflows, business calculations and source-data handling.
+3. Treat the 27-table SQL migrations and existing backend validation as authoritative.
+4. Preserve exact original vehicle, sale, customer, lead, payment and media IDs.
+5. Do not invent missing buyer names, historical payments, sale IDs, invoice numbers or other business data.
+6. Keep all original Excel history, archived media records, audit logs and financial relationships.
+7. Never overwrite, clear or automatically migrate the existing browser-local data.
+8. Do not enable existing production cloud feature flags without verification, data backups and approval.
+9. Replace the original platform-specific owner authentication with securely verified authentication suitable for the final host.
+10. Build and test cloud persistence, private media storage, owner access, transaction reconciliation, recovery and cross-device operation.
+11. Preserve financial idempotency, atomic writes, revision checking, immutable historical evidence and explicit confirmation requirements.
+12. Do not modify the separate public Naina Motors customer website or its Firebase database.
+13. Do not store credentials or private customer/vehicle data in the GitHub repository.
+14. Do not claim a feature is production-ready merely because its source code or synthetic tests pass.
+
+## Implementation priority
+
+**Phase A — Source reconstruction:** Restore the exact application, dependencies, UI and business logic from the pinned repository. Run existing tests and record any discrepancies.
+
+**Phase B — Backend and security:** Validate the 27-table database, implement secure hosted owner authentication, test D1/R2 connectivity, review all unique indexes, and repair any verified schema/UI incompatibilities.
+
+**Phase C — Historical migration:** Obtain authentic owner exports, preserve the original 386-vehicle historical baseline, perform full ID and ledger reconciliation, and import only after a dry-run and verified rollback.
+
+**Phase D — Functional completion:** Complete cloud inventory, enquiries, customers, sales, receipts, expenses, reservations, RTO/workshop, inspections, documents, media and cross-device workflows.
+
+**Phase E — Release readiness:** Test the real hosted environment, mobile browser, recovery process, role permissions and financial correctness before controlled activation.
+
+## Required deliverables
+
+Produce a repository-integrated finished CRM, validated database migrations, complete import/migration reports, passing automated tests, a hosted deployment runbook, a secure data-recovery procedure and a final feature acceptance report.
+
+**Do not start a new CRM from scratch or substitute hypothetical business data for the original records.**
+
+What is this?
+
+### **How to transfer this project**
+
+To give Google AI Studio the best chance of continuing the original implementation accurately, transfer the pinned GitHub source ZIP, the handover above, and a privately obtained copy of the real browser backup. Add the actual hosted D1/R2 exports only if those services are found to exist and contain data.
+
+The main risk is **not losing the code**—the development branch is accessible. It is losing the 386 historical vehicle records, original Excel evidence, payment relationships or media files by treating a fresh cloud database as an already-complete migration.
+
+The source export and data exports must be preserved separately until the new CRM has passed reconciliation and recovery tests.
